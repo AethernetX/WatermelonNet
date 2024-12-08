@@ -1,3 +1,7 @@
+//For security reasons, we will put the secrets in a .env file
+var dotenv = require("dotenv");
+dotenv.config();
+
 //import
 var express = require("express");
 
