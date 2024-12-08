@@ -10,6 +10,9 @@ const port = 8000;
 
 app.set("view engine", "ejs");
 
+//public folder
+app.use(express.static(__dirname + '/public'));
+
 //route handlers
 const mainRoutes = require("./routes/main");
 app.use('/', mainRoutes);
