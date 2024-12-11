@@ -8,11 +8,12 @@
     </head>
     <body>
         <h1>Welcome to WatermelonNet!!</h1>
-        <p><a href="/register">Register</a></p>
-        <p><a href="/login">Login with us</a></p>
         <% if(hasSession) { %>
             <p><a href="/profile">profile</a></p>
             <p><a href="/logout">Logout</a></p>
-        <% } %>
+        <% } else { %>
+            <p><a href="/register">Register</a></p>
+            <p><a href="/login">Login with us</a></p>
+        <& } %>
     </body>
 </html>
