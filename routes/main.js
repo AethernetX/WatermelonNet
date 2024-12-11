@@ -50,4 +50,42 @@ router.post("/registered",[check("email").isEmail(), check("password").isLength(
 
 });
 
+
+router.get("/login", (req, res, next) => {
+    res.render("login.ejs");
+});
+
+router.post("/loggingIn", function (req, res, next) {
+
+    //sanatise
+    req.sanitize(req.body.username);
+    req.sanitize(req.body.password);
+
+    let usernameQuery = "SELECT * FROM users WHERE username = ?";
+    
+    db.query(usernameQuery, [req.body.username], (err, result) => {
+        if(err) {
+            next(err);
+        } else if(result.length == 1) {
+            bcrypt.compare(req.body.password, result[0].password, (error, result) => {
+                if(error) {
+                    next(error);
+                } else if(result == true) {
+                    // Save user session here, when login is successful
+                    //req.session.userId = req.body.username;
+                    res.send("logging in...");
+
+                } else {
+                    res.send("wrong password...");
+                }
+            })
+        } else {
+            res.send("cannot find username");
+        }
+
+        }
+    )
+
+});
+
 module.exports = router;
