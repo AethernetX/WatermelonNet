@@ -91,8 +91,13 @@ router.post("/loggingIn", (req, res, next) => {
 
 });
 
-router.post("/logout", (req, res, next) => {
-    res.send("logged out");
+router.get("/logout", (req, res, next) => {
+    req.session.destroy(err => {
+        if (err) {
+          return res.redirect('/')
+        }
+        res.send('you are now logged out. <a href='+'./'+'>Home</a>');
+        })
 })
 
 module.exports = router;
