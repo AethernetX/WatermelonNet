@@ -6,6 +6,7 @@ dotenv.config();
 var express = require("express");
 var ejs = require("ejs");
 var mysql = require("mysql2");
+var expressSanitizer = require("express-sanitizer");
 
 const app = express();
 const port = 8000;
@@ -40,5 +41,8 @@ global.db = db
 //route handlers
 const mainRoutes = require("./routes/main");
 app.use('/', mainRoutes);
+
+const usersRoutes = require("./routes/users");
+app.use('/users', usersRoutes);
 
 app.listen(port, () => console.log(`Node app listening on port ${port}!`));
