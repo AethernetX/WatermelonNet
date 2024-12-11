@@ -4,6 +4,7 @@ dotenv.config();
 
 //import
 var express = require("express");
+var session = require("express-session");
 var ejs = require("ejs");
 var mysql = require("mysql2");
 var expressSanitizer = require("express-sanitizer");
@@ -21,6 +22,16 @@ app.use(express.static(__dirname + '/public'));
 
 // setup express sanitiser
 app.use(expressSanitizer());
+
+//cookies
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}))
 
 // Define the database connection
 const db = mysql.createConnection ({

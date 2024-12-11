@@ -10,7 +10,11 @@ const router = express.Router();
 
 // Handle our routes
 router.get("/", function(req, res, next){
-    res.render("index.ejs");
+    let hasSession = false;
+    if(req.session.userId){
+        hasSession = true;
+    }
+    res.render("index.ejs", {hasSession : hasSession});
 })
 
 router.get("/register", function(req, res, next){
@@ -72,9 +76,8 @@ router.post("/loggingIn", function (req, res, next) {
                     next(error);
                 } else if(result == true) {
                     // Save user session here, when login is successful
-                    //req.session.userId = req.body.username;
+                    req.session.userId = req.body.username;
                     res.send("logging in...");
-
                 } else {
                     res.send("wrong password...");
                 }
