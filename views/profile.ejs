@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="/main.css">
+    </head>
+    <body>
+        <h1><%= username %></h1>
+        <p>networth</p>
+        <p>stock</p>
+        <p>setup</p>
+
+        <!--If we are the user, let us access our setup-->
+        <% if(user == username) { %>
+            <h1>This is your profile</h1>
+        <% } %>
+    
+    </body> 
+</html>

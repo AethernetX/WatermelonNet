@@ -94,10 +94,15 @@ router.post("/loggingIn", (req, res, next) => {
 router.get("/logout", (req, res, next) => {
     req.session.destroy(err => {
         if (err) {
-          return res.redirect('/')
+            return res.redirect('/')
         }
-        res.send('you are now logged out. <a href='+'./'+'>Home</a>');
+            res.send('you are now logged out. <a href='+'./'+'>Home</a>');
         })
-})
+});
+
+//for profile, we'll just redirect them to users and search for their profile
+router.get("/profile", (req, res, next) => {
+    res.redirect("./users/" + req.session.userId);
+});
 
 module.exports = router;
