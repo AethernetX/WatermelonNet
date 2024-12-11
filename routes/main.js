@@ -9,7 +9,7 @@ const saltRounds = 10;
 const router = express.Router();
 
 // Handle our routes
-router.get("/", function(req, res, next){
+router.get("/", (req, res, next) => {
     let hasSession = false;
     if(req.session.userId){
         hasSession = true;
@@ -17,11 +17,11 @@ router.get("/", function(req, res, next){
     res.render("index.ejs", {hasSession : hasSession});
 })
 
-router.get("/register", function(req, res, next){
+router.get("/register", (req, res, next) => {
     res.render("register.ejs");
 });
 
-router.post("/registered",[check("email").isEmail(), check("password").isLength({min : 6}), check("username").isLength({min : 3, max : 14})],function(req, res, next){
+router.post("/registered",[check("email").isEmail(), check("password").isLength({min : 6}), check("username").isLength({min : 3, max : 14})], (req, res, next) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
         res.send("Uh oh! your username is either too long or too short, your password is too small or your email is not valid!");
@@ -59,7 +59,7 @@ router.get("/login", (req, res, next) => {
     res.render("login.ejs");
 });
 
-router.post("/loggingIn", function (req, res, next) {
+router.post("/loggingIn", (req, res, next) => {
 
     //sanatise
     req.sanitize(req.body.username);
@@ -90,5 +90,9 @@ router.post("/loggingIn", function (req, res, next) {
     )
 
 });
+
+router.post("/logout", (req, res, next) => {
+    res.send("logged out");
+})
 
 module.exports = router;
