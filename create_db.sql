@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT primary key NOT NULL, em
 
 CREATE TABLE IF NOT EXISTS items (id INT AUTO_INCREMENT primary key NOT NULL, name VARCHAR(40), growth DECIMAL DEFAULT 0, farm rate INT DEFAULT 0, price DECIMAL(5,2) unsigned DEFAULT 1);
 
+
+
 # create the app user
 CREATE USER IF NOT EXISTS 'melon_app'@'localhost' IDENTIFIED BY 'skibidi'; 
 GRANT ALL PRIVILEGES ON melon_trade.* TO 'melon_app'@'localhost';

@@ -31,7 +31,7 @@ app.use(session({
     cookie: {
         expires: 600000
     }
-}))
+}));
 
 // Define the database connection
 const db = mysql.createConnection ({

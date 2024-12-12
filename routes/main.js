@@ -4,9 +4,16 @@ const { check, validationResult } = require('express-validator');
 const express = require("express");
 const bcrypt = require("bcrypt");
 
+const cron = require("node-cron");
+
 const saltRounds = 10;
 
 const router = express.Router();
+
+//happens every x amount of time;
+cron.schedule('0 * * * *', () => {
+  console.log("cycle has happened");
+});
 
 // Handle our routes
 router.get("/", (req, res, next) => {
@@ -100,8 +107,9 @@ router.get("/logout", (req, res, next) => {
         })
 });
 
-//for profile, we'll just redirect them to users and search for their profile
+//All our actions will be done on profile for organisation sakes
 router.get("/profile", (req, res, next) => {
+
     res.redirect("./users/" + req.session.userId);
 });
 
