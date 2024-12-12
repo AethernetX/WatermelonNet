@@ -113,4 +113,14 @@ router.get("/profile", (req, res, next) => {
     res.redirect("./users/" + req.session.userId);
 });
 
+router.get("/shop", (req, res, next) => {
+    
+    db.query("SELECT * FROM items", (err, result) => {
+        if(err){
+            next(err);
+        }
+        res.render("shop.ejs", {items: result});
+    });
+});
+
 module.exports = router;
