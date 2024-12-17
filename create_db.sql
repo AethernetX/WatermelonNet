@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS items (
     id INT AUTO_INCREMENT primary key NOT NULL, 
     name VARCHAR(40), 
-    growth_rate DECIMAL DEFAULT 0, 
+    growth_rate DECIMAL(5,2) DEFAULT 0, 
     price DECIMAL(10,2) unsigned DEFAULT 1);
 
 -- -----------------------------------------------------
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS items_users (
 
 CREATE TABLE IF NOT EXISTS machines_users (
     user_id INT, 
-    machines_id INT);
+    machine_id INT);
 
 # create the app user
 CREATE USER IF NOT EXISTS 'melon_app'@'localhost' IDENTIFIED BY 'skibidi'; 

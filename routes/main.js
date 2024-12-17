@@ -1,5 +1,13 @@
 const { check, validationResult } = require('express-validator');
 
+const redirectLogin = (req, res, next) => {
+    if (!req.session.userId ) {
+      res.redirect('./login') // redirect to the login page
+    } else { 
+        next (); // move to the next middleware function
+    } 
+}
+
 // Create a new router
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -51,7 +59,7 @@ router.post("/registered",[check("email").isEmail(), check("password").isLength(
                     if(error){
                         next(error);
                     } else {
-                        res.send("You're all set " + req.body.username + "!");
+                        res.send("You're all set " + req.body.username + "! <a href='./'>click me</a> to go home");
                     }
                 });
             }
@@ -84,7 +92,7 @@ router.post("/loggingIn", (req, res, next) => {
                 } else if(result == true) {
                     // Save user session here, when login is successful
                     req.session.userId = req.body.username;
-                    res.send("logging in...");
+                    res.send("logging in... <a href='./'>click me</a> to go home");
                 } else {
                     res.send("wrong password...");
                 }
@@ -107,20 +115,128 @@ router.get("/logout", (req, res, next) => {
         })
 });
 
-//All our actions will be done on profile for organisation sakes
 router.get("/profile", (req, res, next) => {
-
     res.redirect("./users/" + req.session.userId);
 });
 
-router.get("/shop", (req, res, next) => {
-    
-    db.query("SELECT * FROM items", (err, result) => {
-        if(err){
+router.get("/shop", redirectLogin, (req, res, next) => {
+    //I wish there was a more elegant solution in vanilla js
+
+    //get current money
+    db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (err, user_result) => {
+        if(err) {
             next(err);
         }
-        res.render("shop.ejs", {items: result});
+
+        db.query("SELECT * FROM items", (err, item_result) => {
+            if(err){
+                next(err);
+            }
+            db.query("SELECT * FROM machines", (err, machines_result) => {
+                if(err){
+                    next(err);
+                }
+
+                //console.log(item_result);
+                //console.log(machines_result);
+
+                //for some reason, the type decimal get returned as a string???
+                res.render("shop.ejs", {items: item_result, machines: machines_result, purse: Number(user_result[0].purse), id: user_result[0].id});
+            })
+        });
+    });    
+});
+
+router.post("/buy", redirectLogin, (req, res, next) => {
+
+    db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (err, user_result) => {
+        if(err) {
+            next(err);
+        }
+
+        if(req.body.item){
+            //bought item
+            db.query("SELECT * FROM items WHERE id = ?", [req.body.item], (item_error, item_result) => {
+
+                if(item_error){
+                    next(item_error);
+                }
+
+                //check if user has too many items
+                db.query("SELECT * FROM items_users WHERE user_id = ?", [user_result[0].id], (error_result, check_result) => {
+                    if(error_result) {
+                        next(error_result);
+                    } else {
+                        if(check_result > 5) {
+                            //tell user to sell an item before buying a new one
+                            res.send("You have more than 5 items, sell an item before buying new ones!");
+                        }
+
+                        //else insert user id and item id into the useritem table
+                        db.query("INSERT INTO items_users (user_id, item_id) VALUES (?,?)", [user_result[0].id, req.body.item], (error) => {
+                            if(error){
+                                next(error);
+                            }
+
+                            let updated_purse = user_result[0].purse - item_result[0].price;
+
+                            //deduct money
+                            db.query("UPDATE users SET purse = ? WHERE id = ?", [updated_purse, user_result[0].id], (errorcheck) => {
+                                if(errorcheck){
+                                    next(errorcheck);
+                                }
+                                
+                                res.send("Successfully purchased item!");
+                            });
+
+                        })
+                    }
+                });
+            });
+        } else {
+            //bought machine
+            db.query("SELECT * FROM machines WHERE id = ?", [req.body.machine], (machine_error, machine_result) => {
+
+                if(machine_error){
+                    next(machine_error);
+                }
+
+                //check if user has too many machines
+                db.query("SELECT * FROM machines_users WHERE user_id = ?", [user_result[0].id], (error_result, check_result) => {
+                    if(error_result) {
+                        next(error_result);
+                    } else {
+                        if(check_result > 5) {
+                            //tell user to sell an item before buying a new one
+                            res.send("You have more than 5 items, sell an item before buying new ones!");
+                        }
+
+                        //else insert user id and item id into the useritem table
+                        db.query("INSERT INTO machines_users (user_id, machine_id) VALUES (?,?)", [user_result[0].id, req.body.machine], (error) => {
+                            if(error){
+                                next(error);
+                            }
+
+                            let updated_purse = user_result[0].purse - machine_result[0].price;
+
+                            //deduct money
+                            db.query("UPDATE users SET purse = ? WHERE id = ?", [updated_purse, user_result[0].id], (errorcheck) => {
+                                if(errorcheck){
+                                    next(errorcheck);
+                                }
+                                
+                                res.send("Successfully purchased machine!");
+                            });
+
+                        })
+                    }
+                });
+            });
+                //tell user to sell a machine before buying a new one
+            //else insert user id and the machine id into the usermachine table
+        }
     });
+ 
 });
 
 module.exports = router;

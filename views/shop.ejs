@@ -8,6 +8,32 @@
     </head>
     <body>
         <p><a href="/">Return</a></p>
-         
+        <h1>Shop items</h1>
+        <h2>Your purse: <%= purse %></h2>
+        <form method="post" action="buy">
+            <% for(item in items) { %>
+                <p><b><%= items[item].name %></b> <%= items[item].growth_rate %></p>
+                <p>price: <%= items[item].price %>
+                    <% if(Number(items[item].price) > purse) { %>
+                        <b class="error">Not enough money!</b> 
+                    <% } else { %>
+                        <button name="item" value="<%= items[item].id %>">buy item</button>
+                    <% } %>
+                </p>
+            <% } %>
+            <h1>Shop for machines</h1>
+            <% for(machine in machines) { %>
+                <p><b><%= machines[machine].name %></b> <%= machines[machine].farm_rate %></p>
+                <p>fuel: <%= machines[machine].fuel %></p>
+                <p>price: <%= machines[machine].price %>
+                    <% if(Number(machines[machine].price) > purse) { %>
+                        <b class="error">Not enough money!</b> 
+                    <% } else { %>
+                        <button name="machine" value="<%= machines[machine].id %>">buy machine</button>
+                    <% } %>
+                </p>
+            <% } %>
+        </form>
+        
     </body>
 </html>
