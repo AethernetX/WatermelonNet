@@ -7,12 +7,12 @@
         <link rel="stylesheet" type="text/css" href="/main.css">
     </head>
     <body>
-        <p><a href="./">return home</a></p>
-        <h1><%= username %></h1>
-        <p>purse</p>
-        <p>networth</p>
-        <p>melons</p>
-        <p>land</p> 
+        <p><a href="../../">return home</a></p>
+        <h1><%= user.username %></h1>
+        <p>purse <b><%= user.purse %></b></p>
+        <p>networth <b><%= (Number(user.melons) * 14.3) + user.purse %></b></p>
+        <p>melons <b><%= user.melons %></b></p>
+        <p>land <b><%= user.land %>m2</b></p>
     
     </body> 
 </html>
