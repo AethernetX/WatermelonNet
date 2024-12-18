@@ -239,4 +239,68 @@ router.post("/buy", redirectLogin, (req, res, next) => {
  
 });
 
+router.get("/collection", redirectLogin, (req, res, next) => {
+
+    //join user with items_users and items
+    let item_query = "SELECT users.id, items_users.user_id, items_users.item_id, items.id, items.price, items.name, items.growth_rate, users.username FROM (( users INNER JOIN items_users ON users.id = items_users.user_id ) INNER JOIN items ON items.id = items_users.item_id ) WHERE username = ?";
+
+    let machine_query = "SELECT users.id, machines_users.user_id, machines_users.machine_id, machines.id, machines.price, machines.farm_rate, machines.fuel, machines.name, users.username FROM (( users INNER JOIN machines_users ON users.id = machines_users.user_id ) INNER JOIN machines ON machines.id = machines_users.machine_id ) WHERE username = ?"
+
+    db.query(item_query, [req.session.userId], (item_err, item_result) => {
+        if(item_err){
+            next(item_err);
+        }
+
+        db.query(machine_query, [req.session.userId], (machine_err, machine_result) => {
+            if(machine_err){
+                next(machine_err);
+            }
+
+            //We need user info
+            db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (user_err, user_result) => {
+                if(user_err){
+                    next(user_err);
+                }
+
+                ////how much we can theoretically gain
+                //growth rate
+                let growth_rate = 1;
+                for(let i = 0; i < item_result.length; i++){
+                    growth_rate += Number(item_result[i].growth_rate);
+                }
+
+                let max_melons = user_result[0].land * 6 * growth_rate;
+                
+                ////machines take melon for fuel per cycle
+                let fuel_cost = 0;
+                for(let i = 0; i < machine_result.length; i++){
+                    fuel_cost += machine_result[i].fuel;
+                }
+
+
+                console.log("total fuel cost: " + fuel_cost);
+                
+                max_melons -= fuel_cost;
+
+                //pick up yield
+                let pickup = 0;
+                for(let i = 0; i < machine_result.length; i++){
+                    pickup += (10 * machine_result[i].farm_rate);
+                } 
+
+                let result = 0;
+
+                if(pickup > max_melons) {
+                    result = max_melons 
+                } else {
+                    result = pickup;
+                };
+
+                res.render("collection.ejs", {collection: result});
+            });
+        });
+    });
+
+});
+
 module.exports = router;
