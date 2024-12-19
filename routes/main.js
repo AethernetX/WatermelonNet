@@ -276,10 +276,7 @@ router.get("/collection", redirectLogin, (req, res, next) => {
                 for(let i = 0; i < machine_result.length; i++){
                     fuel_cost += machine_result[i].fuel;
                 }
-
-
-                console.log("total fuel cost: " + fuel_cost);
-                
+ 
                 max_melons -= fuel_cost;
 
                 //pick up yield
@@ -296,7 +293,15 @@ router.get("/collection", redirectLogin, (req, res, next) => {
                     result = pickup;
                 };
 
-                res.render("collection.ejs", {collection: result});
+                result *= user_result[0].cycles;
+                //set cycles to 0 and add the final result of melons
+                db.query("UPDATE users SET cycles = 0, melons = melons + ? WHERE id = 1", [result], (collect_err) => {
+                    if(collect_err){
+                        next(err);
+                    }
+                    res.render("collection.ejs", {collection: result});
+                });
+
             });
         });
     });
