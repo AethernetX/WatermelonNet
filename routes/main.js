@@ -18,9 +18,13 @@ const saltRounds = 10;
 
 const router = express.Router();
 
-//happens every x amount of time;
+//happens every 1 hour;
 cron.schedule('0 * * * *', () => {
-  console.log("cycle has happened");
+  console.log("added cycle");
+  db.query("UPDATE users SET cycles = cycles + 1 WHERE id > 0", (err) => {
+    if(err)
+        console.error(err);
+    });
 });
 
 // Handle our routes
