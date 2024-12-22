@@ -312,4 +312,8 @@ router.get("/collection", redirectLogin, (req, res, next) => {
 
 });
 
+router.get("/about", (req, res, next) => {
+    res.render("about.ejs");
+});
+
 module.exports = router;
