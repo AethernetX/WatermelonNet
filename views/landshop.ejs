@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="/main.css">
+    </head>
+    <body>
+        <p><a href="/">Return</a></p> 
+        <h1>Buy more land for <%= cost %> coins</h1>
+        <form method="POST" action="/buy_land">
+            <% if(Number(user.purse) > cost) { %>
+            <input type="submit" value="buy">
+            <% } else { %>
+            <b class="error">Not enough money!</b> 
+            <% } %>
+        </form>
+    </body>
+</html>

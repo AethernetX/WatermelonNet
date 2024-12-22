@@ -312,6 +312,39 @@ router.get("/collection", redirectLogin, (req, res, next) => {
 
 });
 
+router.get("/landshop", redirectLogin, (req, res, next) => {
+    db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (err, result) => {
+        if(err){
+            next(err);
+        }
+
+        //we'll calculate the price of the next area serverside
+        let landPrice = 1.5 * (result[0].land / 100);
+
+        res.render("landshop.ejs", {user: result[0], cost: landPrice});
+    });
+});
+
+router.post("/buy_land", redirectLogin, (req, res, next) => {
+    
+    db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (err, result) => {
+        if(err){
+            next(err);
+        }
+        //we'll calculate the price of the next area serverside
+        let landPrice = 1.5 * (result[0].land / 100);
+
+        db.query("UPDATE users SET land = land + 100, purse = purse - ? WHERE username = ?", [landPrice, req.session.userId], (buy_err) => {
+            if(buy_err){
+                next(buy_err);
+            }
+
+            res.send("successfully purchased more land");
+        });
+
+    }); 
+})
+
 router.get("/about", (req, res, next) => {
     res.render("about.ejs");
 });
