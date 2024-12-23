@@ -375,7 +375,7 @@ router.post("/exchange", redirectLogin, (req, res, next) => {
             db.query("UPDATE users SET purse = purse + ?, melons = melons - ? WHERE username = ?", [rates * req.body.amount, req.body.amount, req.session.userId], (err) => {
                 res.send("Successfully converted " + req.body.amount + " to " + (rates * req.body.amount));
             });
-        });
+    });
 })
 
 router.get("/about", (req, res, next) => {

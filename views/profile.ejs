@@ -9,8 +9,8 @@
     <body>
         <p><a href="../../">return home</a></p>
         <h1><%= user.username %></h1>
-        <p>purse <b><%= user.purse %></b></p>
-        <p>networth <b><%= (Number(user.melons) * 14.3) + user.purse %></b></p>
+        <p>purse <b><%= user.purse %> coins</b></p>
+        <p>networth <b><%= (Number(user.melons) * rates) + Number(user.purse) %> coins</b></p>
         <p>melons <b><%= user.melons %></b></p>
         <p>land <b><%= user.land %>m2</b></p>
     
