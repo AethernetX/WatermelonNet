@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="/main.css">
+    </head>
+    <body>
+        <p><a href="/">Return</a></p>
+        <h1>Melon exchange rate: 1 melon = <%= rate %> coins</h1>
+        <form method="post" action="/exchange">
+            <% if(all == 0) { %>
+            <b class="error">You don't have any melons right now!</b>
+            <% } else { %>
+            <h2>write how much melons you would like to trade (max melons is <%= all %>)</h2>
+            <input type="number" id="amount-melons" name="amount" min="0" max="<%= all %>" />
+            <input type="submit" value="Exchange!">
+            <% } %>
+        </form>
+    </body>
+</html>

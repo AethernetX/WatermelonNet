@@ -1,4 +1,5 @@
-const { check, validationResult } = require('express-validator');
+const { check, validationResult, body } = require('express-validator');
+const request = require('request');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
@@ -343,6 +344,38 @@ router.post("/buy_land", redirectLogin, (req, res, next) => {
         });
 
     }); 
+});
+
+router.get("/trade", redirectLogin, (req, res, next) => {
+    db.query("SELECT * FROM users WHERE username = ?", [req.session.userId], (error, result) => {
+        if(error){
+            next(error);
+        }
+
+        request("https://api.fxratesapi.com/latest", (err, response, body) => {
+            if(err){
+                next(err);
+            }
+            let rates = JSON.parse(body).rates.GBP;
+
+            //round to 2 dp
+            res.render("trade.ejs", {rate: rates.toFixed(2) * 5, all: result[0].melons});
+        });       
+    }); 
+});
+
+router.post("/exchange", redirectLogin, (req, res, next) => {
+    request("https://api.fxratesapi.com/latest", (err, response, body) => {
+            if(err){
+                next(err);
+            }
+            let rates = JSON.parse(body).rates.GBP;
+            rates = rates.toFixed(2) * 5;
+
+            db.query("UPDATE users SET purse = purse + ?, melons = melons - ? WHERE username = ?", [rates * req.body.amount, req.body.amount, req.session.userId], (err) => {
+                res.send("Successfully converted " + req.body.amount + " to " + (rates * req.body.amount));
+            });
+        });
 })
 
 router.get("/about", (req, res, next) => {
