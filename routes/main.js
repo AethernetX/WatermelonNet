@@ -387,7 +387,11 @@ router.get("/user-list", (req, res, next) => {
 
         res.json(result);
     });
-})
+});
+
+router.post("/search-user", (req, res, next) => {
+    res.redirect("/users/" + req.body.username);
+});
 
 router.get("/about", (req, res, next) => {
     res.render("about.ejs");
