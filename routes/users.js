@@ -3,6 +3,16 @@ const express = require("express");
 const router = express.Router();
 const request = require('request');
 
+router.get("/", (req, res, next) => {
+    db.query("SELECT username FROM users ORDER BY purse DESC, melons DESC, land DESC;", (err, result) => {
+        if(err){
+            next(err);
+        }
+
+        res.render("users.ejs", {users: result});
+    });
+});
+
 router.get("/:username", (req, res, next) => {
     let username = req.params.username;
     req.sanitize(username);    
