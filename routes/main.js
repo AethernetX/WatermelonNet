@@ -376,6 +376,17 @@ router.post("/exchange", redirectLogin, (req, res, next) => {
                 res.send("Successfully converted " + req.body.amount + " to " + (rates * req.body.amount));
             });
     });
+});
+
+router.get("/user-list", (req, res, next) => {
+    db.query("SELECT username, purse, melons, land FROM users", (err, result) => {
+        if(err){
+            next(err);
+            res.json(err);
+        }
+
+        res.json(result);
+    });
 })
 
 router.get("/about", (req, res, next) => {
