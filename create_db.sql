@@ -55,5 +55,5 @@ CREATE TABLE IF NOT EXISTS machines_users (
     machine_id INT);
 
 # create the app user
-CREATE USER IF NOT EXISTS 'melon_app'@'localhost' IDENTIFIED BY 'skibidi'; 
+# CREATE USER IF NOT EXISTS 'melon_app'@'localhost' IDENTIFIED BY writeyourownpassword; 
 GRANT ALL PRIVILEGES ON melon_trade.* TO 'melon_app'@'localhost';
