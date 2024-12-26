@@ -172,7 +172,7 @@ router.post("/buy", redirectLogin, (req, res, next) => {
                     if(error_result) {
                         next(error_result);
                     } else {
-                        if(check_result > 5) {
+                        if(check_result.length > 5) {
                             //tell user to sell an item before buying a new one
                             res.send("You have more than 5 items, sell an item before buying new ones!");
                         }
@@ -211,7 +211,7 @@ router.post("/buy", redirectLogin, (req, res, next) => {
                     if(error_result) {
                         next(error_result);
                     } else {
-                        if(check_result > 5) {
+                        if(check_result.length > 5) {
                             //tell user to sell an item before buying a new one
                             res.send("You have more than 5 items, sell an item before buying new ones!");
                         }
@@ -372,7 +372,12 @@ router.post("/exchange", redirectLogin, (req, res, next) => {
             let rates = JSON.parse(body).rates.GBP;
             rates = rates.toFixed(2) * 5;
 
-            db.query("UPDATE users SET purse = purse + ?, melons = melons - ? WHERE username = ?", [rates * req.body.amount, req.body.amount, req.session.userId], (err) => {
+            let exchangedMoney = rates * req.body.amount;
+
+            db.query("UPDATE users SET purse = purse + ? , melons = melons - ? WHERE username = ?", [exchangedMoney, req.body.amount, req.session.userId], (err) => {
+                if(err){
+                    next(err);
+                }
                 res.send("Successfully converted " + req.body.amount + " to " + (rates * req.body.amount));
             });
     });

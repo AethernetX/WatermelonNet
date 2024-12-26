@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
 router.get("/:username", (req, res, next) => {
     let username = req.params.username;
     req.sanitize(username);    
-    db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
+    db.query("SELECT username, purse, melons, land FROM users WHERE username = ?", [username], (err, result) => {
         if(err){
             next(err);
         }
