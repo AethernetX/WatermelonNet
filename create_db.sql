@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT primary key NOT NULL,
     email VARCHAR(40), username VARCHAR(14),
     isAdmin BOOL DEFAULT FALSE, password VARCHAR(70),
-    purse DECIMAL(5,2) unsigned DEFAULT 100,
+    purse DECIMAL(20,2) unsigned DEFAULT 100,
     melons int unsigned DEFAULT 0,
     land int unsigned DEFAULT 100,
     cycles int unsigned DEFAULT 0);
