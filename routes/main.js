@@ -436,7 +436,6 @@ router.get("/sell-machines", redirectLogin, (req, res, next) => {
         if(err){
             next(err);
         }
-        console.log(result);
         res.render("sell_machines.ejs", {machines: result});
     });
 });
