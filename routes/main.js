@@ -430,6 +430,39 @@ router.post("/sellingItem", redirectLogin, (req, res, next) => {
     })
 });
 
+router.get("/sell-machines", redirectLogin, (req, res, next) => {
+    let query = "SELECT users.username, machines_users.*, machines.name, machines.price FROM ((users INNER JOIN machines_users ON users.id = machines_users.user_id) INNER JOIN machines ON machines.id = machines_users.machine_id) WHERE username = ?";
+    db.query(query, [req.session.userId], (err, result) => {
+        if(err){
+            next(err);
+        }
+        console.log(result);
+        res.render("sell_machines.ejs", {machines: result});
+    });
+});
+
+router.post("/sellingMachine", redirectLogin, (req, res, next) => {
+    db.query("SELECT * FROM machines_users INNER JOIN machines ON machines_users.machine_id = machines.id WHERE machines_users.id = ?", [req.body.machine], (err, result) => {
+        if(err){
+            next(err);
+        }
+        //refund user
+        db.query("UPDATE users SET purse = purse + ? WHERE username = ?", [result[0].price, req.session.userId], (err) => {
+            if(err){
+                next(err);
+            }
+            //delete record
+            db.query("DELETE FROM machines_users WHERE id = ?", [req.body.machine], (err) => {
+                if(err){
+                    next(err);
+                }
+
+                res.send("sold " + result[0].name + " and refunded " + result[0].price);
+            })
+        })
+    })
+});
+
 router.get("/about", (req, res, next) => {
     res.render("about.ejs");
 });
