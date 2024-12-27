@@ -12,7 +12,19 @@ you also need to create a .env file in the root directory. Make sure to write th
 DB_PASSWORD="[Put the same password you gave in the create db file]"
 SESSION_SECRET="[Put a password for the session of your app]"
 
-next in terminal make sure to open the mysql shell in the folder and run the following commands in the specified order.
+next in terminal make sure to open the mysql shell in the folder
+
+for windows:
+```
+mysql -u root -p
+```
+
+for linux:
+```
+sudo mysql
+```
+
+run the following commands in the specified order.
 
 ```
 SOURCE create_db.sql

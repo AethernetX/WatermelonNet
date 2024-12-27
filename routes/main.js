@@ -398,6 +398,38 @@ router.post("/search-user", (req, res, next) => {
     res.redirect("/users/" + req.body.username);
 });
 
+router.get("/sell-items", redirectLogin, (req, res, next) => {
+    let query = "SELECT users.username, items_users.*, items.name, items.price FROM ((users INNER JOIN items_users ON users.id = items_users.user_id) INNER JOIN items ON items.id = items_users.item_id) WHERE username = ?";
+    db.query(query, [req.session.userId], (err, result) => {
+        if(err){
+            next(err);
+        }
+        res.render("sell_items.ejs", {items: result});
+    });
+});
+
+router.post("/sellingItem", redirectLogin, (req, res, next) => {
+    db.query("SELECT * FROM items_users INNER JOIN items ON items_users.item_id = items.id WHERE items_users.id = ?", [req.body.item], (err, result) => {
+        if(err){
+            next(err);
+        }
+        //refund user
+        db.query("UPDATE users SET purse = purse + ? WHERE username = ?", [result[0].price, req.session.userId], (err) => {
+            if(err){
+                next(err);
+            }
+            //delete record
+            db.query("DELETE FROM items_users WHERE id = ?", [req.body.item], (err) => {
+                if(err){
+                    next(err);
+                }
+
+                res.send("sold " + result[0].name + " and refunded " + result[0].price);
+            })
+        })
+    })
+});
+
 router.get("/about", (req, res, next) => {
     res.render("about.ejs");
 });

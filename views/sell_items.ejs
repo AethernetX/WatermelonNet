@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" type="text/css" href="/main.css">
+    </head>
+    <body>
+        <p><a href="./">Return</a></p>
+        <h1>Sell items</h1>
+        <form method="post" action="sellingItem">
+        <% if(items.length == 0) { %>
+            <b class="error">You have no items to sell!</b>
+        <% } else { %>
+            <% for(item in items) { %>
+                <p>Sell <%= items[item].name %> for <%= items[item].price %></p>
+                <button name="item" value="<%= items[item].id %>">Sell</button>
+        <% } } %>
+        </form> 
+    </body>
+</html>

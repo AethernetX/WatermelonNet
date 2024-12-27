@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS machines (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS items_users (
+    id INT AUTO_INCREMENT primary key NOT NULL,
     user_id INT, 
     item_id INT);
 
@@ -50,7 +51,8 @@ CREATE TABLE IF NOT EXISTS items_users (
 -- Table machines_users
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS machines_users (
+CREATE TABLE IF NOT EXISTS machines_users (    
+    id INT AUTO_INCREMENT primary key NOT NULL,
     user_id INT, 
     machine_id INT);
 
