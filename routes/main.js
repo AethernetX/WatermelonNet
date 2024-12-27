@@ -300,7 +300,7 @@ router.get("/collection", redirectLogin, (req, res, next) => {
 
                 result *= user_result[0].cycles;
                 //set cycles to 0 and add the final result of melons
-                db.query("UPDATE users SET cycles = 0, melons = melons + ? WHERE id = 1", [result], (collect_err) => {
+                db.query("UPDATE users SET cycles = 0, melons = melons + ? WHERE username = ?", [result, req.session.userId], (collect_err) => {
                     if(collect_err){
                         next(err);
                     }
