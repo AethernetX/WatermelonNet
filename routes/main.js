@@ -21,7 +21,6 @@ const router = express.Router();
 
 //happens every 1 hour;
 cron.schedule('0 * * * *', () => {
-  console.log("added cycle");
   db.query("UPDATE users SET cycles = cycles + 1 WHERE id > 0", (err) => {
     if(err)
         console.error(err);
