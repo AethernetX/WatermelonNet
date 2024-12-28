@@ -40,7 +40,7 @@ router.get("/register", (req, res, next) => {
     res.render("register.ejs");
 });
 
-router.post("/registered",[check("email").isEmail(), check("password").isLength({min : 6}), check("username").isLength({min : 3, max : 14})], (req, res, next) => {
+router.post("/registered",[check("email").isEmail(), check("password").isLength({min : 6}), check("username").isLength({min : 3, max : 14}).isAlphanumeric()], (req, res, next) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
         res.send("Uh oh! your username is either too long or too short, your password is too small or your email is not valid!");
@@ -363,7 +363,7 @@ router.get("/trade", redirectLogin, (req, res, next) => {
     }); 
 });
 
-router.post("/exchange", redirectLogin, (req, res, next) => {
+router.post("/exchange",[check("amount").isNumeric()], redirectLogin, (req, res, next) => {
     request("https://api.fxratesapi.com/latest", (err, response, body) => {
             if(err){
                 next(err);
