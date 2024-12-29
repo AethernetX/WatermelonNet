@@ -171,7 +171,7 @@ router.post("/buy", redirectLogin, (req, res, next) => {
                     if(error_result) {
                         next(error_result);
                     } else {
-                        if(check_result.length > 5) {
+                        if(check_result.length >= 5) {
                             //tell user to sell an item before buying a new one
                             res.send("You have more than 5 items, sell an item before buying new ones!");
                         }
@@ -210,7 +210,7 @@ router.post("/buy", redirectLogin, (req, res, next) => {
                     if(error_result) {
                         next(error_result);
                     } else {
-                        if(check_result.length > 5) {
+                        if(check_result.length >= 5) {
                             //tell user to sell an item before buying a new one
                             res.send("You have more than 5 items, sell an item before buying new ones!");
                         }
