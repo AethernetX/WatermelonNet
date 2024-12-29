@@ -10,9 +10,19 @@
         <p><a href="../../">return home</a></p>
         <h1><%= user.username %></h1>
         <p>purse <b><%= user.purse %> coins</b></p>
-        <p>networth <b><%= (Number(user.melons) * rates) + Number(user.purse) %> coins</b></p>
+        <p>networth <b><%= (user.melons * rates) + Number(user.purse) + assets %> coins</b></p>
         <p>melons <b><%= user.melons %></b></p>
         <p>land <b><%= user.land %>m2</b></p>
-    
+
+        <h2>items: </h2>
+        <% for(let i = 0; i < items.length; i++){ %>
+            <p><%= items[i].name %></p>
+        <% } %>
+
+        <h2>machines: </h2>
+        <% for(let i = 0; i < machines.length; i++){ %>
+            <p><%= machines[i].name %></p>
+        <% } %>
+
     </body> 
 </html>
