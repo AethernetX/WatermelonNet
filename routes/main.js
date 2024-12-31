@@ -394,7 +394,7 @@ router.get("/user-list", (req, res, next) => {
 });
 
 router.post("/search-user", (req, res, next) => {
-    res.redirect("/users/" + req.body.username);
+    res.redirect("./users/" + req.body.username);
 });
 
 router.get("/sell-items", redirectLogin, (req, res, next) => {
